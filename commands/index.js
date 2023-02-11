@@ -3,7 +3,7 @@ require('dotenv').config();
 
 module.exports = {
     register: function (bot, msg) {
-        const allowedChatId = process.env.ALLOED_CHAT_ID;
+        const allowedChatId = process.env.ALLOWED_CHAT_ID;
         const userId = msg.from.id;
         const msgText = msg.text;
         const chatId = msg.chat.id;

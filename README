@@ -1,0 +1,9 @@
+create .env file in root directory
+TELEGRAM_BOT_API_TOKEN=your_bot_token
+ALLOWED_CHAT_ID=allowed_chat_id
+
+install dotenv using npm install dotenv
+install node-telegram-bot-api npm install node-telegram-bot-api
+install nodemon using npm install nodemon
+
+start using npm start
