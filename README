@@ -1,9 +1,13 @@
 create .env file in root directory
 TELEGRAM_BOT_API_TOKEN=your_bot_token
 ALLOWED_CHAT_ID=allowed_chat_id
+DB_URL=your_mongodb_url
+DB_NAME=db_name
+ADMIN_ID=bot_admin_id
 
-install dotenv using npm install dotenv
-install node-telegram-bot-api npm install node-telegram-bot-api
-install nodemon using npm install nodemon
+install dotenv
+install node-telegram-bot-api
+install nodemon
+install mongodb
 
 start using npm start
