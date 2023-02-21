@@ -3,6 +3,7 @@ const register_book = require('./register_book');
 require('dotenv').config();
 
 async function register_commands(bot, msg) {
+    if(msg.from.is_bot) return;
     const allowedChatId = process.env.ALLOWED_CHAT_ID;
     const userId = msg.from.id;
     const msgText = msg.text;
@@ -13,7 +14,19 @@ async function register_commands(bot, msg) {
                 switch (msgText) {
                     case '/start':
                     case '/start@tt219_2_bot':
-                        await start.start(bot, msg);
+                        if(msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
+                            await bot.deleteMessage(msg.chat.id, msg.message_id);
+                            await bot.sendMessage(msg.from.id, "Բոտը աշխատում է միայն անձնական նամակներով t.me/tt219_2_bot")
+                                .then(() => {
+                                    console.log(`${msg.from.username} used start command!`);
+                                })
+                                .catch((error) => {
+                                    console.error(`Error sending  message to ${msg.from.username}: ${error}`);
+                                });
+                            return;
+                        } else {
+                            await start.start(bot, msg);
+                        }
                         break;
                 }
             } else {

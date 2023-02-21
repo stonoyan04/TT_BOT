@@ -18,18 +18,6 @@ try {
 
 
     bot.on('message', async (msg) => {
-        if(msg.from.is_bot) return;
-        if(msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
-            await bot.deleteMessage(msg.chat.id, msg.message_id);
-            await bot.sendMessage(msg.from.id, "Բոտը աշխատում է միայն անձնական նամակներով t.me/tt219_2_bot")
-                .then(() => {
-                    console.log(`${msg.from.username} used start command!`);
-                })
-                .catch((error) => {
-                    console.error(`Error sending  message to ${msg.from.username}: ${error}`);
-                });
-            return;
-        }
         await commands.register_commands(bot, msg);
     });
 

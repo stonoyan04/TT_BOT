@@ -6,3 +6,4 @@
 /db_name_updtae.js
 /commands/getAdmins.js
 /register_book_edit.js
+/commands/insert_timetable.js
