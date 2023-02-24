@@ -1,7 +1,7 @@
 async function register_book (bot, query) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
-    await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇', {
+    await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
         chat_id: chatId,
         message_id: messageId,
         reply_markup: {
@@ -23,21 +23,19 @@ async function register_book (bot, query) {
         });
 }
 
-async function about_me (bot, query) {
-    require('dotenv').config();
-    const MongoClient = require('mongodb').MongoClient;
-    const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true });
-    const userId = query.from.id;
+async function about_me (bot, query, client) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
+    const userId = query.from.id;
+
+    const result = await client
+        .db(process.env.DB_NAME)
+        .collection('register_book')
+        .findOne({ id: userId });
+    const user =  JSON.parse(JSON.stringify(result));
+
 
     try {
-        await client.connect();
-        const result = await client
-            .db(process.env.DB_NAME)
-            .collection('register_book')
-            .findOne({ id: userId });
-        const user =  JSON.parse(JSON.stringify(result));
         await bot.editMessageText(`${user.name} \n\nԽումբ ֊ ${user.group_number} \nՄատյանի համար ֊ ${user.book_number} \nԼաբ․ խումբ ֊ ${user.lab_number} \nԱնգլերենի խումբ ֊ ${user.lang_number} \nՌուսաց լեզվի խումբ ֊ ${user.hasOwnProperty('_lang_number') ? user._lang_number : user.lang_number}`, {
             chat_id: chatId,
             message_id: messageId,
@@ -59,21 +57,15 @@ async function about_me (bot, query) {
             });
     } catch (error) {
         console.log(`Error retrieving user information: ${error}`);
-    } finally {
-        await client.close();
     }
 }
 
-async function my_group(bot, query) {
-    require('dotenv').config();
-    const MongoClient = require('mongodb').MongoClient;
-    const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true });
+async function my_group(bot, query, client) {
     const userId = query.from.id;
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
 
     try {
-        await client.connect();
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
@@ -102,21 +94,15 @@ async function my_group(bot, query) {
         });
     } catch (error) {
         console.log(`Error retrieving users: ${error}`);
-    } finally {
-        await client.close();
     }
 }
 
-async function my_lab_group(bot, query) {
-    require('dotenv').config();
-    const MongoClient = require('mongodb').MongoClient;
-    const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true });
+async function my_lab_group(bot, query, client) {
     const userId = query.from.id;
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
 
     try {
-        await client.connect();
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
@@ -145,21 +131,15 @@ async function my_lab_group(bot, query) {
         });
     } catch (error) {
         console.log(`Error retrieving users: ${error}`);
-    } finally {
-        await client.close();
     }
 }
 
-async function my_eng_group(bot, query) {
-    require('dotenv').config();
-    const MongoClient = require('mongodb').MongoClient;
-    const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true });
+async function my_eng_group(bot, query, client) {
     const userId = query.from.id;
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
 
     try {
-        await client.connect();
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
@@ -188,21 +168,15 @@ async function my_eng_group(bot, query) {
         });
     } catch (error) {
         console.log(`Error retrieving users: ${error}`);
-    } finally {
-        await client.close();
     }
 }
 
-async function my_rus_group(bot, query) {
-    require('dotenv').config();
-    const MongoClient = require('mongodb').MongoClient;
-    const client = new MongoClient(process.env.DB_URL, { useNewUrlParser: true });
+async function my_rus_group(bot, query, client) {
     const userId = query.from.id;
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
 
     try {
-        await client.connect();
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
@@ -232,8 +206,6 @@ async function my_rus_group(bot, query) {
         });
     } catch (error) {
         console.log(`Error retrieving users: ${error}`);
-    } finally {
-        await client.close();
     }
 }
 

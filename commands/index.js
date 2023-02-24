@@ -1,6 +1,6 @@
 const start = require('./start');
 const register_book = require('./register_book');
-require('dotenv').config();
+const timetable = require('./timetable');
 
 async function register_commands(bot, msg) {
     if(msg.from.is_bot) return;
@@ -44,7 +44,7 @@ async function register_commands(bot, msg) {
         });
 }
 
-async function register_callback (bot, query) {
+async function register_callback (bot, query, client) {
     const callbackData = query.data;
 
     switch (callbackData) {
@@ -52,25 +52,41 @@ async function register_callback (bot, query) {
             await register_book.register_book(bot, query);
             break;
         case 'about_me':
-            await register_book.about_me(bot, query);
+            await register_book.about_me(bot, query, client);
             break;
         case 'my_group':
-            await register_book.my_group(bot, query);
+            await register_book.my_group(bot, query, client);
             break;
         case 'my_lab_group':
-            await register_book.my_lab_group(bot, query);
+            await register_book.my_lab_group(bot, query, client);
             break;
         case 'my_eng_group':
-            await register_book.my_eng_group(bot, query);
+            await register_book.my_eng_group(bot, query, client);
             break;
         case 'my_rus_group':
-            await register_book.my_rus_group(bot, query);
+            await register_book.my_rus_group(bot, query, client);
             break;
         case 'back_to_register_book':
             await register_book.register_book(bot, query);
             break;
         case 'back_to_start':
             await start.back_to_start(bot, query);
+            break;
+        case 'timetable':
+        case 'back_to_timetable':
+            await timetable.timetable(bot, query);
+            break;
+        case 'timetable_today':
+            await timetable.today(bot, query, client);
+            break;
+        case 'timetable_tomorrow':
+            await timetable.tomorrow(bot, query, client);
+            break;
+        case 'timetable_numerator':
+            await timetable.numerator(bot, query, client);
+            break;
+        case 'timetable_denominator':
+            await timetable.denominator(bot, query, client);
             break;
     }
 }
