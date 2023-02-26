@@ -176,7 +176,7 @@ async function tomorrow (bot, query, client) {
                 console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
             });
     } else {
-        if (weekNumber % 2 != 0) {
+        if ((weekNumber+1) % 2 != 0) {
             try {
                 const result = await client
                     .db(process.env.DB_NAME)
