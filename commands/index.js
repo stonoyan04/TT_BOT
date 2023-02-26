@@ -74,7 +74,7 @@ async function register_callback (bot, query, client) {
             break;
         case 'timetable':
         case 'back_to_timetable':
-            await timetable.timetable(bot);
+            await timetable.timetable(bot, query);
             break;
         case 'timetable_today':
             await timetable.today(bot, query, client);
