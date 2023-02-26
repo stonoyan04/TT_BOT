@@ -1,51 +1,29 @@
 async function timetable(bot, query, client) {
+    const user_exist = require('./register_book');
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
-    const userId = query.from.id;
 
-    const result = await client
-        .db(process.env.DB_NAME)
-        .collection('register_book')
-        .findOne({id: userId});
-    const user = JSON.parse(JSON.stringify(result));
+    await user_exist.user_exist(bot, query, client);
+    await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
+        chat_id: chatId,
+        message_id: messageId,
+        reply_markup: {
+            inline_keyboard: [
+                [{text: 'Այսօրվա դասացուցակը', callback_data: 'timetable_today'}],
+                [{text: 'Վաղվա դասացուցակը', callback_data: 'timetable_tomorrow'}],
+                [{text: 'Համարիչ դասացուցակ', callback_data: 'timetable_numerator'}],
+                [{text: 'Հայտարար դասացուցակ', callback_data: 'timetable_denominator'}],
+                [{text: 'Հետ', callback_data: 'back_to_start'}]
+            ]
+        }
+    })
+        .then(function () {
+            console.log(`Message ${messageId} edited in chat ${chatId}.`);
+        })
+        .catch(function (error) {
+            console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
+        });
 
-    if (!user) {
-        await bot.editMessageText(`Քո տվյալները բազայում չկան, ավելացնելու համար գրիր @stonoyan04 ֊ին։`, {
-            chat_id: chatId,
-            message_id: messageId,
-            reply_markup: {
-                inline_keyboard: [
-                    [{text: 'Հետ', callback_data: 'back_to_start'}]
-                ]
-            }
-        })
-            .then(function () {
-                console.log(`Message ${messageId} edited in chat ${chatId}.`);
-            })
-            .catch(function (error) {
-                console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
-            });
-    } else {
-        await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
-            chat_id: chatId,
-            message_id: messageId,
-            reply_markup: {
-                inline_keyboard: [
-                    [{text: 'Այսօրվա դասացուցակը', callback_data: 'timetable_today'}],
-                    [{text: 'Վաղվա դասացուցակը', callback_data: 'timetable_tomorrow'}],
-                    [{text: 'Համարիչ դասացուցակ', callback_data: 'timetable_numerator'}],
-                    [{text: 'Հայտարար դասացուցակ', callback_data: 'timetable_denominator'}],
-                    [{text: 'Հետ', callback_data: 'back_to_start'}]
-                ]
-            }
-        })
-            .then(function () {
-                console.log(`Message ${messageId} edited in chat ${chatId}.`);
-            })
-            .catch(function (error) {
-                console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
-            });
-    }
 }
 
 async function today (bot, query, client) {

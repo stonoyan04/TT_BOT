@@ -1,4 +1,37 @@
-async function register_book (bot, query) {
+async function user_exist (bot, query, client) {
+    const userId = query.from.id;
+    const chatId = query.message.chat.id;
+    const messageId = query.message.message_id;
+    try {
+        const result = await client
+            .db(process.env.DB_NAME)
+            .collection('register_book')
+            .findOne({ id: userId });
+        const user =  JSON.parse(JSON.stringify(result));
+        if(!user) {
+                return await bot.editMessageText(`Քո տվյալները բազայում չկան, ավելացնելու համար գրիր @stonoyan04 ֊ին։`, {
+                    chat_id: chatId,
+                    message_id: messageId,
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{text: 'Հետ', callback_data: 'back_to_start'}]
+                        ]
+                    }
+                })
+                    .then(function () {
+                        console.log(`Message ${messageId} edited in chat ${chatId}.`);
+                    })
+                    .catch(function (error) {
+                        console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
+                    });
+        }
+    } catch (error) {
+        console.log(`Error retrieving users: ${error}`);
+    }
+}
+
+async function register_book (bot, query, client) {
+    await user_exist(bot, query, client);
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
     await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
@@ -216,5 +249,6 @@ module.exports = {
     my_group,
     my_lab_group,
     my_eng_group,
-    my_rus_group
+    my_rus_group,
+    user_exist
 };
