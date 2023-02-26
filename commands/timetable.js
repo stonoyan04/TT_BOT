@@ -1,4 +1,6 @@
-async function timetable(bot) {
+async function timetable(bot, query) {
+    const chatId = query.message.chat.id;
+    const messageId = query.message.message_id;
     await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
         chat_id: chatId,
         message_id: messageId,
