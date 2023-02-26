@@ -49,7 +49,7 @@ async function register_callback (bot, query, client) {
 
     switch (callbackData) {
         case 'register_book':
-            await register_book.register_book(bot, query);
+            await register_book.register_book(bot, query, client);
             break;
         case 'about_me':
             await register_book.about_me(bot, query, client);
@@ -74,7 +74,7 @@ async function register_callback (bot, query, client) {
             break;
         case 'timetable':
         case 'back_to_timetable':
-            await timetable.timetable(bot, query);
+            await timetable.timetable(bot, query, client);
             break;
         case 'timetable_today':
             await timetable.today(bot, query, client);
@@ -87,6 +87,12 @@ async function register_callback (bot, query, client) {
             break;
         case 'timetable_denominator':
             await timetable.denominator(bot, query, client);
+            break;
+        case 'info':
+            await start.info(bot, query);
+            break;
+        case 'literature':
+            await start.literature(bot, query);
             break;
     }
 }

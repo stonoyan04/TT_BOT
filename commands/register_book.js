@@ -1,26 +1,52 @@
-async function register_book (bot, query) {
+async function register_book(bot, query, client) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
-    await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
-        chat_id: chatId,
-        message_id: messageId,
-        reply_markup: {
-            inline_keyboard: [
-                [{ text: 'Իմ մասին', callback_data: 'about_me' }],
-                [{ text: 'Իմ խումբը', callback_data: 'my_group' }],
-                [{ text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group' }],
-                [{ text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group' }],
-                [{ text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group' }],
-                [{ text: 'Հետ', callback_data: 'back_to_start' }]
-            ]
-        }
-    })
-        .then(function() {
-            console.log(`Message ${messageId} edited in chat ${chatId}.`);
+    const userId = query.from.id;
+
+    const result = await client
+        .db(process.env.DB_NAME)
+        .collection('register_book')
+        .findOne({id: userId});
+    const user = JSON.parse(JSON.stringify(result));
+
+    if (!user) {
+        await bot.editMessageText(`Քո տվյալները բազայում չկան, ավելացնելու համար գրիր @stonoyan04 ֊ին։`, {
+            chat_id: chatId,
+            message_id: messageId,
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Հետ', callback_data: 'back_to_start'}]
+                ]
+            }
         })
-        .catch(function(error) {
-            console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
-        });
+            .then(function () {
+                console.log(`Message ${messageId} edited in chat ${chatId}.`);
+            })
+            .catch(function (error) {
+                console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
+            });
+    } else {
+        await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
+            chat_id: chatId,
+            message_id: messageId,
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Իմ մասին', callback_data: 'about_me'}],
+                    [{text: 'Իմ խումբը', callback_data: 'my_group'}],
+                    [{text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group'}],
+                    [{text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group'}],
+                    [{text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group'}],
+                    [{text: 'Հետ', callback_data: 'back_to_start'}]
+                ]
+            }
+        })
+            .then(function () {
+                console.log(`Message ${messageId} edited in chat ${chatId}.`);
+            })
+            .catch(function (error) {
+                console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
+            });
+    }
 }
 
 async function about_me (bot, query, client) {
@@ -31,8 +57,8 @@ async function about_me (bot, query, client) {
     const result = await client
         .db(process.env.DB_NAME)
         .collection('register_book')
-        .findOne({ id: userId });
-    const user =  JSON.parse(JSON.stringify(result));
+        .findOne({id: userId});
+    const user = JSON.parse(JSON.stringify(result));
 
 
     try {
@@ -41,18 +67,18 @@ async function about_me (bot, query, client) {
             message_id: messageId,
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'Իմ խումբը', callback_data: 'my_group' }],
-                    [{ text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group' }],
-                    [{ text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group' }],
-                    [{ text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group' }],
-                    [{ text: 'Հետ', callback_data: 'back_to_register_book' }]
+                    [{text: 'Իմ խումբը', callback_data: 'my_group'}],
+                    [{text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group'}],
+                    [{text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group'}],
+                    [{text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group'}],
+                    [{text: 'Հետ', callback_data: 'back_to_register_book'}]
                 ]
             }
         })
-            .then(function() {
+            .then(function () {
                 console.log(`Message ${messageId} edited in chat ${chatId}.`);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
             });
     } catch (error) {
@@ -69,12 +95,12 @@ async function my_group(bot, query, client) {
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .findOne({ id: userId });
-        const user =  JSON.parse(JSON.stringify(result));
+            .findOne({id: userId});
+        const user = JSON.parse(JSON.stringify(result));
         const users = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .find({ group_number: user.group_number })
+            .find({group_number: user.group_number})
             .toArray();
         const userNames = users
             .map(u => u.name)
@@ -84,11 +110,11 @@ async function my_group(bot, query, client) {
             message_id: messageId,
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'Իմ մասին', callback_data: 'about_me' }],
-                    [{ text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group' }],
-                    [{ text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group' }],
-                    [{ text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group' }],
-                    [{ text: 'Հետ', callback_data: 'back_to_register_book' }]
+                    [{text: 'Իմ մասին', callback_data: 'about_me'}],
+                    [{text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group'}],
+                    [{text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group'}],
+                    [{text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group'}],
+                    [{text: 'Հետ', callback_data: 'back_to_register_book'}]
                 ]
             }
         });
@@ -106,12 +132,12 @@ async function my_lab_group(bot, query, client) {
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .findOne({ id: userId });
-        const user =  JSON.parse(JSON.stringify(result));
+            .findOne({id: userId});
+        const user = JSON.parse(JSON.stringify(result));
         const users = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .find({ lab_number: user.lab_number})
+            .find({lab_number: user.lab_number})
             .toArray();
         const userNames = users
             .map(u => u.name)
@@ -121,11 +147,11 @@ async function my_lab_group(bot, query, client) {
             message_id: messageId,
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'Իմ մասին', callback_data: 'about_me' }],
-                    [{ text: 'Իմ խումբը', callback_data: 'my_group' }],
-                    [{ text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group' }],
-                    [{ text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group' }],
-                    [{ text: 'Հետ', callback_data: 'back_to_register_book' }]
+                    [{text: 'Իմ մասին', callback_data: 'about_me'}],
+                    [{text: 'Իմ խումբը', callback_data: 'my_group'}],
+                    [{text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group'}],
+                    [{text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group'}],
+                    [{text: 'Հետ', callback_data: 'back_to_register_book'}]
                 ]
             }
         });
@@ -143,12 +169,12 @@ async function my_eng_group(bot, query, client) {
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .findOne({ id: userId });
-        const user =  JSON.parse(JSON.stringify(result));
+            .findOne({id: userId});
+        const user = JSON.parse(JSON.stringify(result));
         const users = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .find({ lang_number: user.lang_number})
+            .find({lang_number: user.lang_number})
             .toArray();
         const userNames = users
             .map(u => u.name)
@@ -158,11 +184,11 @@ async function my_eng_group(bot, query, client) {
             message_id: messageId,
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'Իմ մասին', callback_data: 'about_me' }],
-                    [{ text: 'Իմ խումբը', callback_data: 'my_group' }],
-                    [{ text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group' }],
-                    [{ text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group' }],
-                    [{ text: 'Հետ', callback_data: 'back_to_register_book' }]
+                    [{text: 'Իմ մասին', callback_data: 'about_me'}],
+                    [{text: 'Իմ խումբը', callback_data: 'my_group'}],
+                    [{text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group'}],
+                    [{text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group'}],
+                    [{text: 'Հետ', callback_data: 'back_to_register_book'}]
                 ]
             }
         });
@@ -180,13 +206,13 @@ async function my_rus_group(bot, query, client) {
         const result = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .findOne({ id: userId });
+            .findOne({id: userId});
         const user = JSON.parse(JSON.stringify(result));
         const langNumber = user._lang_number ? user._lang_number : user.lang_number;
         const users = await client
             .db(process.env.DB_NAME)
             .collection('register_book')
-            .find({ lang_number: langNumber })
+            .find({lang_number: langNumber})
             .toArray();
         const userNames = users
             .map(u => u.name)
@@ -196,11 +222,11 @@ async function my_rus_group(bot, query, client) {
             message_id: messageId,
             reply_markup: {
                 inline_keyboard: [
-                    [{ text: 'Իմ մասին', callback_data: 'about_me' }],
-                    [{ text: 'Իմ խումբը', callback_data: 'my_group' }],
-                    [{ text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group' }],
-                    [{ text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group' }],
-                    [{ text: 'Հետ', callback_data: 'back_to_register_book' }]
+                    [{text: 'Իմ մասին', callback_data: 'about_me'}],
+                    [{text: 'Իմ խումբը', callback_data: 'my_group'}],
+                    [{text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group'}],
+                    [{text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group'}],
+                    [{text: 'Հետ', callback_data: 'back_to_register_book'}]
                 ]
             }
         });

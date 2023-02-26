@@ -9,8 +9,7 @@ async function start (bot, msg) {
                 [{text: 'Դասացուցակ ', callback_data: 'timetable'}],
                 [{text: 'Մատյան ', callback_data: 'register_book'}],
                 [{text: 'Գրականություն ', callback_data: 'literature'}],
-                [{text: 'Տնային աշխատանք ', callback_data: 'homework'}],
-                [{text: 'Հրամանների մասին', callback_data: 'help'}]
+                [{text: 'Հրամանների մասին', callback_data: 'info'}]
             ]
         }
     })
@@ -35,8 +34,50 @@ async function back_to_start (bot, query) {
                 [{text: 'Դասացուցակ ', callback_data: 'timetable'}],
                 [{text: 'Մատյան ', callback_data: 'register_book'}],
                 [{text: 'Գրականություն ', callback_data: 'literature'}],
-                [{text: 'Տնային աշխատանք ', callback_data: 'homework'}],
-                [{text: 'Հրամանների մասին', callback_data: 'help'}]
+                [{text: 'Հրամանների մասին', callback_data: 'info'}]
+            ]
+        }
+    })
+        .then(function() {
+            console.log(`Message ${messageId} edited in chat ${chatId}.`);
+        })
+        .catch(function(error) {
+            console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
+        });
+}
+
+async function info(bot, query) {
+    const chatId = query.message.chat.id;
+    const messageId = query.message.message_id;
+    await bot.editMessageText(`Բոտը իր աշխատանքը սկսում է /start հրամանից և հետո բոլոր հրամանները դառնում են կոճակով: \n\n Դասացուցակ բաժնում կարողեք տեսնել դասացուցակը(տվյալ օրվանը,հաջորդ օրվանը, համարիչ կամ հայտարար շաբաթվա)։ \n\n Մատյան բաժնում կարողեք տեսնել ձեր խմբի համարը և անդամներին։ \n\nԳրականություն բաժնում կարողեք գտնել տարբեր գրքեր կամ դասախոսություններ։  \n\n Բոլոր առաջարկների, բողոքների կամ այլ հարցերի դեպքում գրեք @stonoyan04 ։`, {
+        chat_id: chatId,
+        message_id: messageId,
+        reply_markup: {
+            inline_keyboard: [
+                [{text: 'Հետ', callback_data: 'back_to_start'}]
+            ]
+        }
+    })
+        .then(function () {
+            console.log(`Message ${messageId} edited in chat ${chatId}.`);
+        })
+        .catch(function (error) {
+            console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
+        });
+}
+
+async function literature (bot, query) {
+    const chatId = query.message.chat.id;
+    const messageId = query.message.message_id;
+    await bot.editMessageText('Սեղմիր <a href="https://drive.google.com/drive/folders/1hSayav8M8EfowjN1cfoA6dUmp70PI8lY">այստեղ</a>:', {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+        reply_markup: {
+            inline_keyboard: [
+                [{text: 'Հետ', callback_data: 'back_to_start'}]
+
             ]
         }
     })
@@ -50,5 +91,7 @@ async function back_to_start (bot, query) {
 
 module.exports = {
     start,
-    back_to_start
+    back_to_start,
+    info,
+    literature
 };
