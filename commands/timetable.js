@@ -1,9 +1,4 @@
-async function timetable(bot, query, client) {
-    const user_exist = require('./register_book');
-    const chatId = query.message.chat.id;
-    const messageId = query.message.message_id;
-
-    await user_exist.user_exist(bot, query, client);
+async function timetable(bot) {
     await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
         chat_id: chatId,
         message_id: messageId,
@@ -41,6 +36,9 @@ async function today (bot, query, client) {
     const dayOfWeek = daysOfWeek[gmt4Date.getUTCDay()];
     const dayOfWeek_arm = daysOfWeek_arm[gmt4Date.getUTCDay()];
 
+
+    const user_exist = require('./register_book');
+    await user_exist.user_exist(bot, query, client);
 
     if (dayOfWeek == 'Saturday' || dayOfWeek == 'Sunday') {
         await bot.editMessageText(`Այսօր հանգստյան օր է 😉:`, {
@@ -153,6 +151,8 @@ async function tomorrow (bot, query, client) {
     const dayOfWeek = daysOfWeek[gmt4Date.getUTCDay()+1];
     const dayOfWeek_arm = daysOfWeek_arm[gmt4Date.getUTCDay()+1];
 
+    const user_exist = require('./register_book');
+    await user_exist.user_exist(bot, query, client);
 
     if (dayOfWeek == 'Saturday' || dayOfWeek == 'Sunday') {
         await bot.editMessageText(`Վաղը հանգստյան օր է 😉:`, {
@@ -268,6 +268,9 @@ async function numerator (bot, query, client) {
     const timetable = JSON.parse(JSON.stringify(_result));
     let timetable_numerator = '';
 
+    const user_exist = require('./register_book');
+    await user_exist.user_exist(bot, query, client);
+
     for (let i = 0; i < daysOfWeek.length; i++) {
         const dayOfWeek = daysOfWeek[i];
         const dayOfWeek_arm = daysOfWeek_arm[i];
@@ -315,6 +318,9 @@ async function denominator (bot, query, client) {
         .findOne({id: 'timetable'});
     const timetable = JSON.parse(JSON.stringify(_result));
     let timetable_numerator = '';
+
+    const user_exist = require('./register_book');
+    await user_exist.user_exist(bot, query, client);
 
     for (let i = 0; i < daysOfWeek.length; i++) {
         const dayOfWeek = daysOfWeek[i];

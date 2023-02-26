@@ -30,8 +30,7 @@ async function user_exist (bot, query, client) {
     }
 }
 
-async function register_book (bot, query, client) {
-    await user_exist(bot, query, client);
+async function register_book (bot, query) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
     await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
@@ -60,6 +59,8 @@ async function about_me (bot, query, client) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
     const userId = query.from.id;
+
+    await user_exist(bot, query, client);
 
     const result = await client
         .db(process.env.DB_NAME)
@@ -98,6 +99,8 @@ async function my_group(bot, query, client) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
 
+    await user_exist(bot, query, client);
+
     try {
         const result = await client
             .db(process.env.DB_NAME)
@@ -134,6 +137,8 @@ async function my_lab_group(bot, query, client) {
     const userId = query.from.id;
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
+
+    await user_exist(bot, query, client);
 
     try {
         const result = await client
@@ -172,6 +177,8 @@ async function my_eng_group(bot, query, client) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
 
+    await user_exist(bot, query, client);
+
     try {
         const result = await client
             .db(process.env.DB_NAME)
@@ -208,6 +215,8 @@ async function my_rus_group(bot, query, client) {
     const userId = query.from.id;
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
+
+    await user_exist(bot, query, client);
 
     try {
         const result = await client

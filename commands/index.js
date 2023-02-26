@@ -49,7 +49,7 @@ async function register_callback (bot, query, client) {
 
     switch (callbackData) {
         case 'register_book':
-            await register_book.register_book(bot, query, client);
+            await register_book.register_book(bot, query);
             break;
         case 'about_me':
             await register_book.about_me(bot, query, client);
@@ -74,7 +74,7 @@ async function register_callback (bot, query, client) {
             break;
         case 'timetable':
         case 'back_to_timetable':
-            await timetable.timetable(bot, query, client);
+            await timetable.timetable(bot);
             break;
         case 'timetable_today':
             await timetable.today(bot, query, client);
