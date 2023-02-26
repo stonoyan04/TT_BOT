@@ -1,52 +1,26 @@
-async function register_book (bot, query, client) {
+async function register_book (bot, query) {
     const chatId = query.message.chat.id;
     const messageId = query.message.message_id;
-    const userId = query.from.id;
-
-    const result = await client
-        .db(process.env.DB_NAME)
-        .collection('register_book')
-        .findOne({ id: userId });
-    const user = await JSON.parse(JSON.stringify(result));
-
-    if (!user) {
-        await bot.editMessageText(`Քո տվյալները բազայում չկան, ավելացնելու համար գրիր @stonoyan04 ֊ին։`, {
-            chat_id: chatId,
-            message_id: messageId,
-            reply_markup: {
-                inline_keyboard: [
-                    [{text: 'Հետ', callback_data: 'back_to_start'}]
-                ]
-            }
+    await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
+        chat_id: chatId,
+        message_id: messageId,
+        reply_markup: {
+            inline_keyboard: [
+                [{ text: 'Իմ մասին', callback_data: 'about_me' }],
+                [{ text: 'Իմ խումբը', callback_data: 'my_group' }],
+                [{ text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group' }],
+                [{ text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group' }],
+                [{ text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group' }],
+                [{ text: 'Հետ', callback_data: 'back_to_start' }]
+            ]
+        }
+    })
+        .then(function() {
+            console.log(`Message ${messageId} edited in chat ${chatId}.`);
         })
-            .then(function () {
-                console.log(`Message ${messageId} edited in chat ${chatId}.`);
-            })
-            .catch(function (error) {
-                console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
-            });
-    } else {
-        await bot.editMessageText('Ըտրիր տարբերակներից մեկը 👇 \n\n Հ․ Գ․ այս հրամանների մշակումը կարող է սովորականից երկար տևել։', {
-            chat_id: chatId,
-            message_id: messageId,
-            reply_markup: {
-                inline_keyboard: [
-                    [{ text: 'Իմ մասին', callback_data: 'about_me' }],
-                    [{ text: 'Իմ խումբը', callback_data: 'my_group' }],
-                    [{ text: 'Իմ լաբ․ խումբը', callback_data: 'my_lab_group' }],
-                    [{ text: 'Իմ անգլերենի խումբը', callback_data: 'my_eng_group' }],
-                    [{ text: 'Իմ ռուսաց լեզվի խումբը', callback_data: 'my_rus_group' }],
-                    [{ text: 'Հետ', callback_data: 'back_to_start' }]
-                ]
-            }
-        })
-            .then(function() {
-                console.log(`Message ${messageId} edited in chat ${chatId}.`);
-            })
-            .catch(function(error) {
-                console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
-            });
-    }
+        .catch(function(error) {
+            console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
+        });
 }
 
 async function about_me (bot, query, client) {
@@ -58,7 +32,7 @@ async function about_me (bot, query, client) {
         .db(process.env.DB_NAME)
         .collection('register_book')
         .findOne({ id: userId });
-    const user = JSON.parse(JSON.stringify(result));
+    const user =  JSON.parse(JSON.stringify(result));
 
 
     try {
