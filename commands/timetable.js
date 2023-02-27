@@ -30,14 +30,13 @@ async function today (bot, query, client) {
     const now = new Date();
     const offset = 4;
     const gmt4Date = new Date(now.getTime() + offset * 60 * 60 * 1000);
-    const start = new Date('February 6, 2023');
+    const start = new Date('February 5, 2023');
     const days = Math.floor((gmt4Date - start) / (24 * 60 * 60 * 1000));
     let weekNumber = Math.ceil(days / 7);
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const daysOfWeek_arm = ['Կիրակի', 'Երկուշաբթի', 'Երեքշաբթի', 'Չորեքշաբտի', 'Հինգշաբթի', 'Ուրբաթ', 'Շաբաթ'];
     const dayOfWeek = daysOfWeek[gmt4Date.getUTCDay()];
     const dayOfWeek_arm = daysOfWeek_arm[gmt4Date.getUTCDay()];
-
 
     const user_exist = require('./register_book');
     await user_exist.user_exist(bot, query, client);
@@ -121,7 +120,7 @@ async function today (bot, query, client) {
                 message_id: messageId,
                 reply_markup: {
                     inline_keyboard: [
-                        [{text: 'Այսօրվա դասացուցակը', callback_data: 'timetable_today'}],
+                        [{text: 'Վաղվա դասացուցակը', callback_data: 'timetable_tomorrow'}],
                         [{text: 'Համարիչ դասացուցակ', callback_data: 'timetable_numerator'}],
                         [{text: 'Հայտարար դասացուցակ', callback_data: 'timetable_numerator'}],
                         [{text: 'Հետ', callback_data: 'back_to_timetable'}]
@@ -145,8 +144,8 @@ async function tomorrow (bot, query, client) {
     const now = new Date();
     const offset = 4;
     const gmt4Date = new Date(now.getTime() + offset * 60 * 60 * 1000);
-    const start = new Date('February 6, 2023');
-    const days = Math.floor((gmt4Date - start) / (24 * 60 * 60 * 1000));
+    const start = new Date('February 5, 2023');
+    const days = Math.floor((gmt4Date - start) / (24 * 60 * 60 * 1000))+1;
     let weekNumber = Math.ceil(days / 7);
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const daysOfWeek_arm = ['Կիրակի', 'Երկուշաբթի', 'Երեքշաբթի', 'Չորեքշաբտի', 'Հինգշաբթի', 'Ուրբաթ', 'Շաբաթ'];
@@ -176,7 +175,7 @@ async function tomorrow (bot, query, client) {
                 console.error(`Error editing message ${messageId} in chat ${chatId}: ${error}`);
             });
     } else {
-        if ((weekNumber+1) % 2 != 0) {
+        if ((weekNumber) % 2 != 0) {
             try {
                 const result = await client
                     .db(process.env.DB_NAME)
