@@ -149,8 +149,8 @@ async function tomorrow (bot, query, client) {
     let weekNumber = Math.ceil(days / 7);
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const daysOfWeek_arm = ['Կիրակի', 'Երկուշաբթի', 'Երեքշաբթի', 'Չորեքշաբտի', 'Հինգշաբթի', 'Ուրբաթ', 'Շաբաթ'];
-    const dayOfWeek = daysOfWeek[gmt4Date.getUTCDay()+1];
-    const dayOfWeek_arm = daysOfWeek_arm[gmt4Date.getUTCDay()+1];
+    const dayOfWeek = daysOfWeek[(gmt4Date.getUTCDay() + 1) % 7];
+    const dayOfWeek_arm = daysOfWeek_arm[(gmt4Date.getUTCDay() + 1) % 7];
 
     const user_exist = require('./register_book');
     await user_exist.user_exist(bot, query, client);
