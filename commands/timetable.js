@@ -122,7 +122,7 @@ async function today (bot, query, client) {
                     inline_keyboard: [
                         [{text: 'Վաղվա դասացուցակը', callback_data: 'timetable_tomorrow'}],
                         [{text: 'Համարիչ դասացուցակ', callback_data: 'timetable_numerator'}],
-                        [{text: 'Հայտարար դասացուցակ', callback_data: 'timetable_numerator'}],
+                        [{text: 'Հայտարար դասացուցակ', callback_data: 'timetable_denominator'}],
                         [{text: 'Հետ', callback_data: 'back_to_timetable'}]
                     ]
                 }
